@@ -1,5 +1,6 @@
-package com.example.apihermandad.entity;
+package com.example.apihermandad.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -9,7 +10,7 @@ public class Hermano {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_hermano", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
@@ -30,14 +31,15 @@ public class Hermano {
     @Column(name = "activo", nullable = false)
     private Boolean activo;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -97,4 +99,10 @@ public class Hermano {
         this.password = password;
     }
 
+    @PrePersist
+    public void prePersist() {
+        if (activo == null) {
+            activo = true;
+        }
+    }
 }
