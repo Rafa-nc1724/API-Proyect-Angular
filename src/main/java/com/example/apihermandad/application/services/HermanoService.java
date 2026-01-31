@@ -24,6 +24,16 @@ public class HermanoService {
     }
 
     public List<HermanoDto> findAll() {
+        // * Ejemplo de construccion con builder
+        // HermanoDto hermano = HermanoDto.builder()
+        // .activo(true)
+        // .direccion("fulano")
+        // .dni("23984324T")
+        // .build();
+
+        // return List.of(hermano);
+
+
         return hermanoRepository.findAll().stream().map(hermanoMapper::toDto).toList();
     }
 

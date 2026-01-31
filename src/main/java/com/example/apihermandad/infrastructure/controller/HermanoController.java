@@ -1,19 +1,24 @@
 package com.example.apihermandad.infrastructure.controller;
 
-import com.example.apihermandad.application.dto.HermanoCreateDto;
-import com.example.apihermandad.application.dto.HermanoDto;
-import com.example.apihermandad.application.mapper.HermanoMapper;
-import com.example.apihermandad.application.services.HermanoService;
-import com.example.apihermandad.domain.repository.HermanoRepository;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import com.example.apihermandad.application.dto.HermanoCreateDto;
+import com.example.apihermandad.application.dto.HermanoDto;
+import com.example.apihermandad.application.services.HermanoService;
 
 @Controller
-@RequestMapping("/api/hermanos")
+@RequestMapping("/api/hermano")
 @CrossOrigin(origins = "http://localhost:4200")
 public class HermanoController {
 
@@ -24,15 +29,24 @@ public class HermanoController {
     }
 
     /**
-    * GET /api/hermanos
-    */
-    @GetMapping
+     * GET /api/hermano
+     */
+    @GetMapping("/all")
     public ResponseEntity<List<HermanoDto>> findAll() {
         return ResponseEntity.ok(hermanoService.findAll());
     }
 
     /**
-     * GET /api/hermanos/{id}
+     * POST /api/hermano
+     */
+    @PostMapping
+    public ResponseEntity<HermanoDto> save(@RequestBody HermanoCreateDto dto) {
+        HermanoDto created = hermanoService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    /**
+     * GET /api/hermano/{id}
      */
     @GetMapping("/{id}")
     public ResponseEntity<HermanoDto> findById(@PathVariable Long id) {
@@ -40,12 +54,10 @@ public class HermanoController {
     }
 
     /**
-     * POST /api/hermanos
+     * PUT /api/hermano/{id}
      */
-    @PostMapping
-    public ResponseEntity<HermanoDto> save(@RequestBody HermanoCreateDto dto) {
-        HermanoDto created=hermanoService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @PutMapping("/{id}")
+    public ResponseEntity<HermanoDto> updatebyId(@PathVariable Long id, @RequestBody HermanoDto hermano) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
-
 }

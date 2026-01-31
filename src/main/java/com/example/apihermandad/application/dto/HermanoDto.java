@@ -3,11 +3,20 @@ package com.example.apihermandad.application.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * DTO for {@link com.example.apihermandad.domain.entity.Hermano}
  */
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
 public class HermanoDto implements Serializable {
-    private final Integer id;
+    private final Long id;
     private final String nombre;
     private final String dni;
     private final String direccion;
@@ -15,43 +24,6 @@ public class HermanoDto implements Serializable {
     private final String email;
     private final Boolean activo;
 
-    public HermanoDto(Integer id, String nombre, String dni, String direccion, String telefono, String email, Boolean activo) {
-        this.id = id;
-        this.nombre = nombre;
-        this.dni = dni;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.email = email;
-        this.activo = activo;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
 
     @Override
     public boolean equals(Object o) {
