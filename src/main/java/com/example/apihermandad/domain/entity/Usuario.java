@@ -22,34 +22,34 @@ public class Usuario {
     private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
+    private String name;
 
     @Column(name = "dni", nullable = false, length = 100)
     private String dni;
 
     @Column(name = "direccion", nullable = false, length = 100)
-    private String direccion;
+    private String address;
 
     @Column(name = "telefono", length = 100)
-    private String telefono;
+    private String phone;
 
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
     @Column(name = "pass", nullable = false, length = 100)
-    private String pass;
+    private String password;
 
-    @ColumnDefault("1")
+    @ColumnDefault("true")
     @Column(name = "activo", nullable = false)
-    private Byte activo;
+    private Boolean active;
 
     @ColumnDefault("'usuario'")
     @Lob
     @Column(name = "rol", nullable = false)
-    private String rol;
+    private String role;
 
     @Column(name = "fecha_ingreso", nullable = false)
-    private LocalDate fechaIngreso;
+    private LocalDate createDate;
 
 
 }

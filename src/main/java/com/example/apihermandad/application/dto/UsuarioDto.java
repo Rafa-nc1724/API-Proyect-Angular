@@ -15,12 +15,12 @@ import java.time.LocalDate;
 @Data
 public class UsuarioDto implements Serializable {
     Integer id;
-    String nombre;
+    String name;
     String dni;
-    String direccion;
-    String telefono;
+    String address;
+    String phone;
     String email;
-    Byte activo;
-    String rol;
-    LocalDate fechaIngreso;
+    Boolean active;
+    String role;
+    LocalDate createDate;
 }

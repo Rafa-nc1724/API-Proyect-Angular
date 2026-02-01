@@ -1,15 +1,25 @@
 package com.example.apihermandad.application.mapper;
 
+import com.example.apihermandad.application.dto.UsuarioCreateDto;
 import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.domain.entity.Usuario;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+import java.time.LocalDate;
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = PasswordMapper.class, imports = LocalDate.class)
 public interface UsuarioMapper {
-    Usuario toEntity(UsuarioDto usuarioDto);
 
-    UsuarioDto toDto(Usuario usuario);
+    @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
+    @Mapping(target = "createDate", expression = "java(LocalDate.now())")
+    @Mapping(target = "role", expression = "java(\"usuario\")")
+    @Mapping(target = "active", expression = "java(true)")
+    Usuario toCreateEntity(UsuarioCreateDto userDto);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Usuario partialUpdate(UsuarioDto usuarioDto, @MappingTarget Usuario usuario);
+    Usuario toUpdateEntity(UsuarioCreateDto userDto);
+
+    UsuarioDto toDto(Usuario user);
 }
