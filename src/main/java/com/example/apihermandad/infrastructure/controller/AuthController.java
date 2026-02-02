@@ -1,7 +1,7 @@
 package com.example.apihermandad.infrastructure.controller;
 
-import com.example.apihermandad.application.dto.UserRequestDto;
-import com.example.apihermandad.application.dto.UserResponseDto;
+import com.example.apihermandad.application.dto.LoginRequestDto;
+import com.example.apihermandad.application.dto.LoginResponseDto;
 import com.example.apihermandad.application.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +23,9 @@ public class AuthController {
     /**
      * POST api/auth/login
      */
-    @PostMapping("/me")
-    public ResponseEntity<UserResponseDto> login(
-            @RequestBody UserRequestDto request) {
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(
+            @RequestBody LoginRequestDto request) {
 
         return ResponseEntity.ok(authService.login(request));
     }

@@ -1,8 +1,8 @@
 package com.example.apihermandad.application.services;
 
 import com.example.apihermandad.application.dto.JwtData;
-import com.example.apihermandad.application.dto.UserRequestDto;
-import com.example.apihermandad.application.dto.UserResponseDto;
+import com.example.apihermandad.application.dto.LoginRequestDto;
+import com.example.apihermandad.application.dto.LoginResponseDto;
 import com.example.apihermandad.application.mapper.UsuarioMapper;
 import com.example.apihermandad.domain.entity.Sesion;
 import com.example.apihermandad.domain.entity.Usuario;
@@ -20,8 +20,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final SesionRepository sesionRepository;
 
-    public AuthService(UsuarioRepository usuarioRepository,
-                       UsuarioMapper usuarioMapper, UsuarioRepository userRepository, UsuarioMapper userMapper,
+    public AuthService(UsuarioRepository userRepository, UsuarioMapper userMapper,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
                        SesionRepository sesionRepository) {
@@ -32,7 +31,7 @@ public class AuthService {
         this.sesionRepository = sesionRepository;
     }
 
-    public UserResponseDto login(UserRequestDto request) {
+    public LoginResponseDto login(LoginRequestDto request) {
 
         Usuario user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Credenciales incorrectas"));
@@ -51,7 +50,7 @@ public class AuthService {
 
         sesionRepository.save(sesion);
 
-        return new UserResponseDto(
+        return new LoginResponseDto(
                 jwtData.getToken(),
                 userMapper.toDto(user)
         );
