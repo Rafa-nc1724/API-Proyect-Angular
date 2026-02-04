@@ -182,6 +182,7 @@ UNLOCK TABLES;
 --
 -- Table structure for table `sesiones`
 --
+
 DROP TABLE IF EXISTS `sesiones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -191,16 +192,20 @@ CREATE TABLE `sesiones` (
   `token` longtext NOT NULL,
   `fecha_emision` bigint(20) unsigned NOT NULL,
   `fecha_expiracion` bigint(20) unsigned NOT NULL,
+  `finguer_print` longtext NOT NULL,
+  `active` tinyint(4) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `sesiones_usuario_FK` (`id_usuario`),
   CONSTRAINT `sesiones_usuario_FK` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sesiones`
 --
+
 LOCK TABLES `sesiones` WRITE;
 /*!40000 ALTER TABLE `sesiones` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sesiones` ENABLE KEYS */;
 UNLOCK TABLES;
+

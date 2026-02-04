@@ -8,8 +8,12 @@ import com.example.apihermandad.domain.entity.Sesion;
 import com.example.apihermandad.domain.entity.Usuario;
 import com.example.apihermandad.domain.repository.SesionRepository;
 import com.example.apihermandad.domain.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Service
 public class AuthService {
@@ -31,7 +35,7 @@ public class AuthService {
         this.sesionRepository = sesionRepository;
     }
 
-    public LoginResponseDto login(LoginRequestDto request) {
+    public LoginResponseDto login(LoginRequestDto request, HttpServletRequest httpRequest) {
 
         Usuario user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Credenciales incorrectas"));
@@ -41,12 +45,15 @@ public class AuthService {
         }
 
         JwtData jwtData = jwtService.generateToken(user);
+        String fingerprint=buildFingerprint(httpRequest);
 
         Sesion sesion = new Sesion();
-        sesion.setIdUsuario(user);
+        sesion.setUsuario(user);
         sesion.setToken(jwtData.getToken());
         sesion.setFechaEmision(jwtData.getIssuedAt());
         sesion.setFechaExpiracion(jwtData.getExpiresAt());
+        sesion.setFingerPrint(fingerprint);
+        sesion.setActive(true);
 
         sesionRepository.save(sesion);
 
@@ -54,5 +61,11 @@ public class AuthService {
                 jwtData.getToken(),
                 userMapper.toDto(user)
         );
+    }
+    private String buildFingerprint(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+        String raw = ip + "|" + userAgent;
+        return Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
     }
 }
