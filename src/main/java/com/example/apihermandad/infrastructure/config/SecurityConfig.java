@@ -4,6 +4,7 @@ import com.example.apihermandad.domain.repository.SesionRepository;
 import com.example.apihermandad.infrastructure.security.SessionAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,7 +36,12 @@ public class SecurityConfig {
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        //estas son los endpoint públicos
+                        .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/news").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
+
+                        //todos los demás son privados
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
