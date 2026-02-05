@@ -1,14 +1,3 @@
-INSERT INTO hermandad.usuario (nombre,dni,direccion,telefono,email,pass,activo,rol,fecha_ingreso) VALUES
-	 ('Chemar',
-	 '12312612A',
-	 'Calle Falsa 123',
-	 '123456789',
-	 'chema@email.com',
-	 '$2a$10$O2Q4Oeu8oV.wAwtxqlp9ieAOoc69Upry62gmWY6cIK5iycg8JalFq',
-	 1,
-	 'junta',
-	 '2026-02-01');
-
 INSERT INTO hermandad.noticia (titulo,fecha,descripcion,imagen) VALUES
 	 ('Restauración del señor','2026-02-01','Concluye con éxito la restauración del Señor de la Humildad
 
