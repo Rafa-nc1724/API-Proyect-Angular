@@ -39,6 +39,7 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         String token = authHeader.substring(7);
 
         Optional<Sesion> sesionOpt = sesionRepository.findActiveSessionWithUser(token);
@@ -60,6 +61,7 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
         String currentFingerprint = buildFinguerprint(request);
         if(!currentFingerprint.equals(sesion.getFingerPrint())) {
+            SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

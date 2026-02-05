@@ -15,8 +15,11 @@ public interface UsuarioMapper {
 
     @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
     @Mapping(target = "createDate", expression = "java(LocalDate.now())")
-    @Mapping(target = "role", expression = "java(\"usuario\")")
     @Mapping(target = "active", expression = "java(true)")
+    @Mapping(
+            target = "role",
+            expression = "java(userDto.getRole() != null ? userDto.getRole() : \"usuario\")"
+    )
     Usuario toCreateEntity(UsuarioCreateDto userDto);
 
     Usuario toUpdateEntity(UsuarioCreateDto userDto);
