@@ -1,13 +1,12 @@
 package com.example.apihermandad.application.services;
 
-import com.example.apihermandad.application.dto.NoticiaDto;
-import com.example.apihermandad.application.mapper.NoticiaMapper;
-import com.example.apihermandad.domain.entity.Noticia;
-import com.example.apihermandad.domain.repository.NoticiaRepository;
-import com.example.apihermandad.domain.repository.UsuarioRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.apihermandad.application.dto.NoticiaDto;
+import com.example.apihermandad.application.mapper.NoticiaMapper;
+import com.example.apihermandad.domain.repository.NoticiaRepository;
 
 @Service
 public class NoticiaService {

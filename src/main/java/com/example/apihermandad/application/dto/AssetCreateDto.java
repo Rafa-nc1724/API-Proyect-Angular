@@ -1,9 +1,9 @@
 package com.example.apihermandad.application.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
  * DTO for {@link com.example.apihermandad.domain.entity.Noticia}
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticiaDto implements Serializable {
+public class AssetCreateDto {
     Integer id;
-    String titulo;
-    LocalDate fecha;
-    String descripcion;
-    String imagen;
+    String name;
+    String type;
+    byte[] data;
+    LocalDateTime createTime;
 }
