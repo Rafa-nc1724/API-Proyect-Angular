@@ -14,7 +14,7 @@ public class NoticiaMapper {
                 noticia.getTitulo(),
                 noticia.getFecha(),
                 noticia.getDescripcion(),
-                noticia.getImagen()
+                noticia.getImagenId()!= null ? "api/images/" + noticia.getImagenId() : null
         );
     }
 }

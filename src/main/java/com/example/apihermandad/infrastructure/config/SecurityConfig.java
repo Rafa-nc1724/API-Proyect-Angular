@@ -43,8 +43,9 @@ public class SecurityConfig {
                                 "/swagger-ui.html").permitAll()
                         //estas son los endpoint públicos
                         .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/news").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/news").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/images/**").permitAll()
 
                         //todos los demás son privados
                         .anyRequest().authenticated()

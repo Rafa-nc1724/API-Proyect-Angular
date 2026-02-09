@@ -14,5 +14,5 @@ public class NoticiaDto implements Serializable {
     String titulo;
     LocalDate fecha;
     String descripcion;
-    String imagen;
+    String imagenUrl;
 }
