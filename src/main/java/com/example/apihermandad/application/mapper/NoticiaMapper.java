@@ -2,19 +2,15 @@ package com.example.apihermandad.application.mapper;
 
 import com.example.apihermandad.application.dto.NoticiaDto;
 import com.example.apihermandad.domain.entity.Noticia;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface NoticiaMapper {
 
-@Component
-public class NoticiaMapper {
-
-    public NoticiaDto toDto(Noticia noticia) {
-
-        return new NoticiaDto(
-                noticia.getId(),
-                noticia.getTitulo(),
-                noticia.getFecha(),
-                noticia.getDescripcion(),
-                noticia.getImagenId()!= null ? "api/images/" + noticia.getImagenId() : null
-        );
-    }
+    @Mapping(
+            target = "imagenUrl",
+            expression = "java(noticia.getImagenId() != null ? \"api/images/\" + noticia.getImagenId() : null)"
+    )
+    NoticiaDto toDto(Noticia noticia);
 }

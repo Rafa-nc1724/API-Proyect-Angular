@@ -6,7 +6,6 @@ import com.example.apihermandad.application.mapper.NoticiaMapper;
 import com.example.apihermandad.domain.entity.Image;
 import com.example.apihermandad.domain.entity.Noticia;
 import com.example.apihermandad.domain.repository.NoticiaRepository;
-
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

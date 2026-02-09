@@ -2,20 +2,13 @@ package com.example.apihermandad.application.mapper;
 
 import com.example.apihermandad.application.dto.EventoDto;
 import com.example.apihermandad.domain.entity.Evento;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface EventoMapper {
 
-@Component
-public class EventoMapper {
-
-    public EventoDto toDto(Evento evento) {
-
-        return new EventoDto(
-                evento.getId(),
-                evento.getTitulo(),
-                evento.getDescripcion(),
-                evento.getFecha(),
-                evento.getIdGrupo() != null ? evento.getIdGrupo().getId() : null,
-                evento.getIdGrupo() != null ? evento.getIdGrupo().getNombre() : null
-        );
-    }
+    @Mapping(target = "grupoId", source = "idGrupo.id")
+    @Mapping(target = "grupoNombre", source = "idGrupo.nombre")
+    EventoDto toDto(Evento evento);
 }

@@ -5,8 +5,6 @@ import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.application.services.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
