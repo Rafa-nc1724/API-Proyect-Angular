@@ -22,13 +22,6 @@ class UsuarioController {
         this.userService = userService;
     }
 
-
-    /*La lista la pueden ver los tras puesto que
-    *el admin tiene todos los permisos
-    * la junta puede ver la lista de usuarios
-    * el capataz necesita la lista de usuarios para
-    * hacer los cambios de usuario normal a costalero
-    * */
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN','JUNTA', 'CAPATAZ')")
     public ResponseEntity<List<UsuarioDto>> findAll() {

@@ -1,7 +1,9 @@
 package com.example.apihermandad.infrastructure.controller;
 
 import com.example.apihermandad.application.dto.NoticiaDto;
+import com.example.apihermandad.application.dto.NoticiaUpdateDto;
 import com.example.apihermandad.application.services.NoticiaService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +23,8 @@ public class NoticiaController {
         this.noticiaService = noticiaService;
     }
 
-    // 🔓 Público
+    //Público
+    @Operation(security = {})
     @GetMapping
     public List<NoticiaDto> getAllNoticias() {
         return noticiaService.getAllNoticias();
@@ -37,6 +40,18 @@ public class NoticiaController {
             @RequestParam MultipartFile imagen
     ) {
         return noticiaService.create(titulo, descripcion, fecha, imagen);
+    }
+
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    public NoticiaDto update(
+            @PathVariable Integer id,
+            @ModelAttribute NoticiaUpdateDto dto
+    ) {
+        return noticiaService.update(id, dto);
     }
 
     // Delete

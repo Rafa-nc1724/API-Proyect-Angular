@@ -2,6 +2,7 @@ package com.example.apihermandad.infrastructure.controller;
 
 import com.example.apihermandad.application.dto.EventoDto;
 import com.example.apihermandad.application.services.EventoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class EventoController {
      * GET /api/events
      * Endpoint público
      */
+    @Operation(security = {})
     @GetMapping
     public List<EventoDto> getAllEventos() {
         return eventoService.getAllEventos();
