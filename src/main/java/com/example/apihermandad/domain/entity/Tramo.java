@@ -1,11 +1,15 @@
 package com.example.apihermandad.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -22,5 +26,7 @@ public class Tramo {
     @Column(name = "entrada", nullable = false)
     private LocalDate entrada;
 
+    @Column(name = "descripcion", nullable = false)
+    private String descripcion;
 
 }
