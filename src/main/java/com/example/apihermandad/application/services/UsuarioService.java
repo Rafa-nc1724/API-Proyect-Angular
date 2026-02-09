@@ -5,8 +5,11 @@ import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.application.mapper.UsuarioMapper;
 import com.example.apihermandad.domain.entity.Usuario;
 import com.example.apihermandad.domain.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -42,16 +45,27 @@ public class UsuarioService {
         return userMapper.toDto(userRepository.save(user));
     }
 
-    // admin, junta y capataz
+    // admin y junta
+    @Transactional
     public UsuarioDto update(Integer id, UsuarioDto dto) {
-        Usuario user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        user.setName(dto.getName());
-        user.setAddress(dto.getAddress());
-        user.setPhone(dto.getPhone());
+        Usuario usuario = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Usuario no encontrado"
+                        )
+                );
 
-        return userMapper.toDto(userRepository.save(user));
+        usuario.setName(dto.getName());
+        usuario.setDni(dto.getDni());
+        usuario.setAddress(dto.getAddress());
+        usuario.setPhone(dto.getPhone());
+        usuario.setEmail(dto.getEmail());
+        usuario.setRole(dto.getRole());
+        usuario.setActive(dto.getActive());
+
+        return userMapper.toDto(userRepository.save(usuario));
     }
 
     //solo admin y junta

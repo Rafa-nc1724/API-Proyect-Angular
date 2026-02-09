@@ -19,6 +19,7 @@ public class UsuarioDto implements Serializable {
     String dni;
     String address;
     String phone;
+    
     String email;
     Boolean active;
     String role;

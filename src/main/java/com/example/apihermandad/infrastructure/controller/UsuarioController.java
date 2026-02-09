@@ -42,9 +42,9 @@ class UsuarioController {
         return ResponseEntity.ok(userService.create(userDto));
     }
 
-    //hacer el update los tres (admin / junta / capataz)
+    //hacer el update (admin / junta)
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
+    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
     public ResponseEntity<UsuarioDto> update(
             @PathVariable Integer id,
             @RequestBody UsuarioDto dto
