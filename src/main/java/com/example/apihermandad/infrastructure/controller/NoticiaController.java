@@ -24,4 +24,5 @@ public class NoticiaController {
     public List<NoticiaDto> getAllNoticias() {
         return noticiaService.getAllNoticias();
     }
+
 }

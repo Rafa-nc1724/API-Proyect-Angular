@@ -36,6 +36,11 @@ public class SecurityConfig {
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        //Swagger, es obligatorio para Alejandro
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html").permitAll()
                         //estas son los endpoint públicos
                         .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/news").permitAll()

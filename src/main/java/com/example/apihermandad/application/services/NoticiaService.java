@@ -19,10 +19,13 @@ public class NoticiaService {
         this.noticiaMapper = noticiaMapper;
     }
 
+    //Único Servicio público
     public List<NoticiaDto> getAllNoticias(){
         return noticiaRepository.findAll()
                 .stream()
                 .map(noticiaMapper::toDto)
                 .toList();
     }
+
+
 }
