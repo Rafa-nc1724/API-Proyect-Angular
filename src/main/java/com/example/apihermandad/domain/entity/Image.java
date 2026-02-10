@@ -1,24 +1,31 @@
 package com.example.apihermandad.domain.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "images")
+@Table(name = "image")
 public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @NotNull
+    @Column(nullable = false, length = 100, unique = true)
+    private String name;
+
+    @Column(nullable = false, length = 100)
+    private String type; // image/png | image/jpeg
+
     @Lob
-    @Column(name = "image_base64", nullable = false)
-    private String imageBase64;
-
-
+    @Column(nullable = false)
+    private String base64;
 }

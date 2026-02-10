@@ -9,6 +9,6 @@ import org.mapstruct.MappingConstants;
 public interface EventoMapper {
 
     @Mapping(target = "grupoId", source = "idGrupo.id")
-    @Mapping(target = "grupoNombre", source = "idGrupo.nombre")
+    @Mapping(target = "grupoNombre", source = "idGrupo.name")
     EventoDto toDto(Evento evento);
 }

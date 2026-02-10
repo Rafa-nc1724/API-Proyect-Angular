@@ -2,65 +2,94 @@ package com.example.apihermandad.application.services;
 
 import com.example.apihermandad.domain.entity.Image;
 import com.example.apihermandad.domain.repository.ImageRepository;
+import com.example.apihermandad.utils.CompressionTools;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.zip.GZIPOutputStream;
-
+import java.util.UUID;
 
 @Service
-    public class ImageService {
+public class ImageService {
 
-        private final ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
-        public ImageService(ImageRepository imageRepository) {
-            this.imageRepository = imageRepository;
+    public ImageService(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
+    }
+
+    /**
+     * Guarda una imagen y devuelve la ruta lógica: /image/{id}
+     */
+    public String saveImage(MultipartFile file) {
+
+        if (file == null || file.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El archivo de imagen es obligatorio"
+            );
         }
 
-        public Image saveImage(MultipartFile file) {
-
-            if (file.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Imagen vacía");
-            }
-
-            String contentType = file.getContentType();
-            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato no permitido");
-            }
-
-            try {
-                byte[] compressed = compress(file.getBytes());
-                String base64 = Base64.getEncoder().encodeToString(compressed);
-
-                Image image = new Image();
-                image.setImageBase64(base64);
-                return imageRepository.save(image);
-
-            } catch (IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error procesando imagen");
-            }
+        String contentType = file.getContentType();
+        if (!"image/png".equals(contentType) && !"image/jpeg".equals(contentType)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Solo se permiten imágenes PNG o JPEG"
+            );
         }
 
-        public String getImageBase64(Integer id) {
-            return imageRepository.findById(id)
-                    .map(Image::getImageBase64)
-                    .orElseThrow(() ->
-                            new ResponseStatusException(HttpStatus.NOT_FOUND, "Imagen no encontrada")
-                    );
-        }
+        try {
+            byte[] bytes = file.getBytes();
+            String base64Compressed = CompressionTools.comprimirABase64(bytes);
 
-        private byte[] compress(byte[] data) throws IOException {
-            // Compresión simple GZIP (suficiente y segura)
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            GZIPOutputStream gzip = new GZIPOutputStream(bos);
-            gzip.write(data);
-            gzip.close();
-            return bos.toByteArray();
+            Image image = new Image();
+            image.setName(generateUniqueName(file.getOriginalFilename()));
+            image.setType(contentType);
+            image.setBase64(base64Compressed);
+
+            Image saved = imageRepository.save(image);
+
+            return "/image/" + saved.getId();
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error al procesar la imagen"
+            );
         }
     }
 
+    /**
+     * Recupera la imagen descomprimida por ID
+     */
+    public ImageData loadImage(Integer id) {
+
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Imagen no encontrada"
+                ));
+
+        try {
+            byte[] bytes = CompressionTools.descomprimirDeBase64(image.getBase64());
+            return new ImageData(image.getType(), bytes);
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error al descomprimir la imagen"
+            );
+        }
+    }
+
+    private String generateUniqueName(String originalName) {
+        return UUID.randomUUID() + "_" + originalName;
+    }
+
+    /**
+     * DTO interno de servicio (no expuesto)
+     */
+    public record ImageData(String contentType, byte[] bytes) {}
+}

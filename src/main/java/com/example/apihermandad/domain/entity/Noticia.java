@@ -3,17 +3,11 @@ package com.example.apihermandad.domain.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -26,8 +20,8 @@ public class Noticia {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "titulo", nullable = false, length = 100)
-    private String titulo;
+    @Column(name = "title", nullable = false, length = 100)
+    private String title;
 
     @NotNull
     @Column(name = "fecha", nullable = false)
@@ -35,12 +29,12 @@ public class Noticia {
 
     @NotNull
     @Lob
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "imagen_id")
-    private Integer imagenId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
 
 }

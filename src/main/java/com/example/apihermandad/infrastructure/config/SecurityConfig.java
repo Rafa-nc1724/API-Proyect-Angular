@@ -36,18 +36,20 @@ public class SecurityConfig {
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        //Swagger, es obligatorio para Alejandro
+                        // Swagger
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/swagger-ui.html").permitAll()
-                        //estas son los endpoint públicos
-                        .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/news").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/images/**").permitAll()
+                                "/swagger-ui.html"
+                        ).permitAll()
 
-                        //todos los demás son privados
+                        // Endpoints públicos
+                        .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/news").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/image/**").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
+
+                        // Todo lo demás, protegido
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

@@ -5,14 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "grupo")
 public class Grupo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,17 +19,18 @@ public class Grupo {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
     @Lob
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "description")
+    private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "imagen_id")
-    private Image imagen;
-
-
+    /**
+     * Ruta lógica de la imagen:
+     * Ejemplo: /image/12
+     * Puede ser null (grupo sin imagen)
+     */
+    @Column(name = "image_id")
+    private String image;
 }
