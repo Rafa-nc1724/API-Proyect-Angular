@@ -8,9 +8,12 @@ import com.example.apihermandad.domain.entity.Sesion;
 import com.example.apihermandad.domain.entity.Usuario;
 import com.example.apihermandad.domain.repository.SesionRepository;
 import com.example.apihermandad.domain.repository.UsuarioRepository;
+import com.example.apihermandad.utils.HttpMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -38,7 +41,10 @@ public class AuthService {
     public LoginResponseDto login(LoginRequestDto request, HttpServletRequest httpRequest) {
 
         Usuario user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Credenciales incorrectas"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.NOT_FOUND_NOTICE
+                ));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Credenciales incorrectas");

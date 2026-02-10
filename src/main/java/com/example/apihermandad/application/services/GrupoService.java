@@ -5,6 +5,7 @@ import com.example.apihermandad.application.dto.GrupoDto;
 import com.example.apihermandad.application.mapper.GrupoMapper;
 import com.example.apihermandad.domain.entity.Grupo;
 import com.example.apihermandad.domain.repository.GrupoRepository;
+import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +30,6 @@ public class GrupoService {
         this.imageService = imageService;
     }
 
-    // 🔐 Autenticado
     public List<GrupoDto> findAll() {
         return grupoRepository.findAll()
                 .stream()
@@ -37,17 +37,15 @@ public class GrupoService {
                 .toList();
     }
 
-    // 🔐 Autenticado
     public GrupoDto findById(Integer id) {
         Grupo grupo = grupoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Grupo no encontrado"
+                        HttpMessage.NOT_FOUND_GROUP
                 ));
         return grupoMapper.toDto(grupo);
     }
 
-    // 🔐 ADMIN
     public GrupoDto create(GrupoCreateUpdateDto dto, MultipartFile image) {
 
         Grupo grupo = new Grupo();
@@ -62,13 +60,12 @@ public class GrupoService {
         return grupoMapper.toDto(grupoRepository.save(grupo));
     }
 
-    // 🔐 ADMIN
     public GrupoDto update(Integer id, GrupoCreateUpdateDto dto, MultipartFile image) {
 
         Grupo grupo = grupoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Grupo no encontrado"
+                        HttpMessage.NOT_FOUND_GROUP
                 ));
 
         grupo.setName(dto.getName());
@@ -76,18 +73,18 @@ public class GrupoService {
 
         if (image != null && !image.isEmpty()) {
             String imagePath = imageService.saveImage(image);
+            imageService.deleteImageByPath(grupo.getImage());
             grupo.setImage(imagePath);
         }
 
         return grupoMapper.toDto(grupoRepository.save(grupo));
     }
 
-    // 🔐 ADMIN
     public void delete(Integer id) {
         if (!grupoRepository.existsById(id)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Grupo no encontrado"
+                    HttpMessage.NOT_FOUND_GROUP
             );
         }
         grupoRepository.deleteById(id);

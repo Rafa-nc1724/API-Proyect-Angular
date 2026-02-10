@@ -5,6 +5,7 @@ import com.example.apihermandad.application.mapper.EventoMapper;
 import com.example.apihermandad.domain.entity.Evento;
 import com.example.apihermandad.domain.entity.Grupo;
 import com.example.apihermandad.domain.repository.EventoRepository;
+import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -50,7 +51,7 @@ public class EventoService {
         Evento evento = eventoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Evento no encontrado"
+                        HttpMessage.NOT_FOUND_NOTICE
                 ));
 
         evento.setTitulo(dto.titulo());
@@ -70,7 +71,7 @@ public class EventoService {
         if (!eventoRepository.existsById(id)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Evento no encontrado"
+                    HttpMessage.NOT_FOUND_NOTICE
             );
         }
         eventoRepository.deleteById(id);

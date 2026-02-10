@@ -20,9 +20,12 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
-    /**
-     * Guarda una imagen y devuelve la ruta lógica: /image/{id}
-     */
+    private String generateUniqueName(String originalName) {
+        return UUID.randomUUID() + "_" + originalName;
+    }
+
+    public record ImageData(String contentType, byte[] bytes) {}
+
     public String saveImage(MultipartFile file) {
 
         if (file == null || file.isEmpty()) {
@@ -61,9 +64,6 @@ public class ImageService {
         }
     }
 
-    /**
-     * Recupera la imagen descomprimida por ID
-     */
     public ImageData loadImage(Integer id) {
 
         Image image = imageRepository.findById(id)
@@ -84,12 +84,17 @@ public class ImageService {
         }
     }
 
-    private String generateUniqueName(String originalName) {
-        return UUID.randomUUID() + "_" + originalName;
-    }
-
-    /**
-     * DTO interno de servicio (no expuesto)
-     */
-    public record ImageData(String contentType, byte[] bytes) {}
+   public void deleteImageByPath(String imgPath){
+        if(imgPath == null || imgPath.isBlank()){
+            return;
+        }
+        String[] parts = imgPath.split("/");
+        if(parts.length !=3){
+            return;
+        }
+        try{
+            Integer imgId = Integer.valueOf(parts[2]);
+            imageRepository.deleteById(imgId);
+        }catch (NumberFormatException ignored){}
+   }
 }

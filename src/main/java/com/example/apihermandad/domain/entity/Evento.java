@@ -21,7 +21,7 @@ public class Evento {
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
-    @Column(name = "descripcion", nullable = false, length = 100)
+    @Column(name = "description", nullable = false, length = 100)
     private String descripcion;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,7 +29,7 @@ public class Evento {
     @JoinColumn(name = "id_grupo")
     private Grupo idGrupo;
 
-    @Column(name = "titulo", nullable = false, length = 100)
+    @Column(name = "title", nullable = false, length = 100)
     private String titulo;
 
 
