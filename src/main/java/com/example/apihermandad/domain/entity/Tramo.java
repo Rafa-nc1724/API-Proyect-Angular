@@ -2,12 +2,14 @@ package com.example.apihermandad.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.time.LocalDate;
 
+
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -19,17 +21,15 @@ public class Tramo {
     private Integer id;
 
     @NotNull
-    @Column(name = "salida", nullable = false)
-    private LocalDate salida;
+    @Column(name = "go_out", nullable = false)
+    private LocalDate goOut;
 
     @NotNull
-    @Column(name = "entrada", nullable = false)
-    private LocalDate entrada;
+    @Column(name = "enter", nullable = false)
+    private LocalDate enter;
 
-    @Size(max = 100)
     @NotNull
-    @Column(name = "descripcion", nullable = false, length = 100)
-    private String descripcion;
-
+    @Column(name = "description", nullable = false, length = 100)
+    private String description;
 
 }

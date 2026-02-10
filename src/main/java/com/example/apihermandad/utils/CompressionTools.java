@@ -1,9 +1,15 @@
 package com.example.apihermandad.utils;
 
+import com.example.apihermandad.domain.entity.Tramo;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Base64;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -40,6 +46,30 @@ public class CompressionTools {
                 baos.write(buffer, 0, len);
             }
             return baos.toByteArray();
+        }
+    }
+
+    public static void validateNoOvverlap(LocalDate goOut, LocalDate enter, List<Tramo> existingTramos){
+        for (Tramo tr : existingTramos){
+            LocalDate existGoOut =tr.getGoOut();
+            LocalDate existEnter = tr.getEnter();
+
+            if(!goOut.isAfter(existEnter.plusDays(1)) &&
+                    !enter.isBefore(existEnter.minusDays(1))){
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        HttpMessage.TR_SOLAP
+                );
+            }
+        }
+    }
+
+    public static void validateDates(LocalDate goOut, LocalDate enter) {
+        if (enter.isBefore(goOut)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    HttpMessage.ERROR_DAYS
+            );
         }
     }
 }

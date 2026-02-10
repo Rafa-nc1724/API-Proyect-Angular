@@ -1,6 +1,5 @@
 package com.example.apihermandad.application.dto;
 
-
 import lombok.*;
 import java.time.LocalDate;
 
