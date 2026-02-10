@@ -1,7 +1,9 @@
 package com.example.apihermandad.infrastructure.controller;
 
+import com.example.apihermandad.application.dto.EventoCreateUpdateDto;
 import com.example.apihermandad.application.dto.EventoDto;
 import com.example.apihermandad.application.services.EventoService;
+import com.example.apihermandad.infrastructure.security.AllEditRoles;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,21 +38,21 @@ public class EventoController {
 
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
-    public ResponseEntity<EventoDto> create(@RequestBody EventoDto dto) {
+    @AllEditRoles
+    public ResponseEntity<EventoDto> create(@RequestBody EventoCreateUpdateDto dto) {
         return ResponseEntity.ok(eventoService.create(dto));
     }
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
-    public ResponseEntity<EventoDto> update(@PathVariable Integer id, @RequestBody EventoDto dto) {
+    @AllEditRoles
+    public ResponseEntity<EventoDto> update(@PathVariable Integer id, @RequestBody EventoCreateUpdateDto dto) {
         return ResponseEntity.ok(eventoService.update(id,dto));
     }
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
+    @AllEditRoles
     public ResponseEntity<EventoDto> delete(@PathVariable Integer id) {
         eventoService.delete(id);
         return ResponseEntity.noContent().build();

@@ -5,6 +5,8 @@ import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.application.dto.UsuarioSelfUpdateDto;
 import com.example.apihermandad.application.services.UsuarioService;
 import com.example.apihermandad.domain.entity.Usuario;
+import com.example.apihermandad.infrastructure.security.AllEditRoles;
+import com.example.apihermandad.infrastructure.security.AllowedRoles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -24,28 +26,28 @@ class UsuarioController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
+    @AllEditRoles
     public ResponseEntity<List<UsuarioDto>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<UsuarioDto> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<UsuarioDto> register(@RequestBody UsuarioCreateDto userDto) {
         return ResponseEntity.ok(userService.create(userDto));
     }
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<UsuarioDto> update(
             @PathVariable Integer id,
             @RequestBody UsuarioDto dto
@@ -67,7 +69,7 @@ class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<Void> invalidate(@PathVariable Integer id) {
         userService.invalidate(id);
         return ResponseEntity.noContent().build();

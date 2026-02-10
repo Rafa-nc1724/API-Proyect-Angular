@@ -1,13 +1,15 @@
 package com.example.apihermandad.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
 @Entity
@@ -22,15 +24,15 @@ public class Evento {
     private LocalDate fecha;
 
     @Column(name = "description", nullable = false, length = 100)
-    private String descripcion;
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_grupo")
-    private Grupo idGrupo;
+    private Grupo id_group;
 
     @Column(name = "title", nullable = false, length = 100)
-    private String titulo;
+    private String title;
 
 
 }

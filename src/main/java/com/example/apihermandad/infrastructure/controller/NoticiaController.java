@@ -4,6 +4,7 @@ import com.example.apihermandad.application.dto.NoticiaCreateUpdateDto;
 import com.example.apihermandad.application.dto.NoticiaDto;
 import com.example.apihermandad.application.services.NoticiaService;
 import com.example.apihermandad.domain.repository.NoticiaRepository;
+import com.example.apihermandad.infrastructure.security.AllowedRoles;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -40,7 +41,7 @@ class NoticiaController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<NoticiaDto> create(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
@@ -57,7 +58,7 @@ class NoticiaController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<NoticiaDto> update(
             @PathVariable Integer id,
             @RequestParam("title") String title,
@@ -74,7 +75,7 @@ class NoticiaController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JUNTA')")
+    @AllowedRoles
     public ResponseEntity<NoticiaDto> delete(@PathVariable Integer id) {
         noticiaService.delete(id);
         return ResponseEntity.noContent().build();

@@ -1,10 +1,12 @@
 package com.example.apihermandad.application.services;
 
+import com.example.apihermandad.application.dto.EventoCreateUpdateDto;
 import com.example.apihermandad.application.dto.EventoDto;
 import com.example.apihermandad.application.mapper.EventoMapper;
 import com.example.apihermandad.domain.entity.Evento;
 import com.example.apihermandad.domain.entity.Grupo;
 import com.example.apihermandad.domain.repository.EventoRepository;
+import com.example.apihermandad.domain.repository.GrupoRepository;
 import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,13 @@ public class EventoService {
 
     private final EventoRepository eventoRepository;
     private final EventoMapper eventoMapper;
+    private final GrupoRepository grRepository;
 
     public EventoService(EventoRepository eventoRepository,
-                         EventoMapper eventoMapper) {
+                         EventoMapper eventoMapper, GrupoRepository grRepository) {
         this.eventoRepository = eventoRepository;
         this.eventoMapper = eventoMapper;
+        this.grRepository = grRepository;
     }
 
     //Este servicio es el único público
@@ -33,39 +37,46 @@ public class EventoService {
                 .toList();
     }
 
-    //Servicios privados solo para admin, junta y capataz.
-    public EventoDto create(EventoDto dto){
-        Evento event= new Evento();
-        event.setTitulo(dto.titulo());
-        event.setDescripcion(dto.descripcion());
-        event.setFecha(dto.fecha());
-        if (dto.grupoId() != null){
-            Grupo grup = new Grupo();
-            grup.setId(dto.grupoId());
-            grup.setId(dto.grupoId());
-            event.setIdGrupo(grup);
-        }
+
+    public EventoDto create(EventoCreateUpdateDto dto){
+
+        Grupo grup = grRepository.findByName(dto.groupName())
+                .orElseThrow(()-> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        HttpMessage.NOT_FOUND_GROUP
+                ));
+
+        Evento event = Evento.builder()
+                .title(dto.title())
+                .description(dto.description())
+                .fecha(dto.fecha())
+                .id_group(grup)
+                .build();
+
         return eventoMapper.toDto(eventoRepository.save(event));
     }
 
-    public EventoDto update(Integer id, EventoDto dto) {
-        Evento evento = eventoRepository.findById(id)
+    public EventoDto update(Integer id, EventoCreateUpdateDto dto) {
+        Evento event = eventoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         HttpMessage.NOT_FOUND_NOTICE
                 ));
 
-        evento.setTitulo(dto.titulo());
-        evento.setDescripcion(dto.descripcion());
-        evento.setFecha(dto.fecha());
+        Grupo grup = grRepository.findByName(dto.groupName())
+                        .orElseThrow(()-> new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                HttpMessage.NOT_FOUND_GROUP
+                        ));
 
-        if (dto.grupoId() != null) {
-            Grupo grupo = new Grupo();
-            grupo.setId(dto.grupoId());
-            evento.setIdGrupo(grupo);
-        }
+        event.builder()
+                .title(dto.title())
+                .description(dto.description())
+                .fecha(dto.fecha())
+                .id_group(grup)
+                .build();
 
-        return eventoMapper.toDto(eventoRepository.save(evento));
+        return eventoMapper.toDto(eventoRepository.save(event));
     }
 
     public void delete(Integer id) {

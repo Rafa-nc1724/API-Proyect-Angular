@@ -8,7 +8,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface EventoMapper {
 
-    @Mapping(target = "grupoId", source = "idGrupo.id")
-    @Mapping(target = "grupoNombre", source = "idGrupo.name")
+    @Mapping(target = "id_group", source = "id_group.id")
+    @Mapping(target = "groupName", source = "id_group.name")
     EventoDto toDto(Evento evento);
 }

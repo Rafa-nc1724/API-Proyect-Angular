@@ -4,10 +4,10 @@ import java.time.LocalDate;
 
 public record EventoDto(
         Integer id,
-        String titulo,
-        String descripcion,
+        String title,
+        String description,
         LocalDate fecha,
-        Integer grupoId,
-        String grupoNombre
+        Integer id_group,
+        String groupName
 ) {
 }
