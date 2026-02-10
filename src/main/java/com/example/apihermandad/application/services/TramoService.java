@@ -5,7 +5,7 @@ import com.example.apihermandad.application.dto.TramoDto;
 import com.example.apihermandad.application.mapper.TramoMapper;
 import com.example.apihermandad.domain.entity.Tramo;
 import com.example.apihermandad.domain.repository.TramoRepository;
-import com.example.apihermandad.utils.CompressionTools;
+import com.example.apihermandad.utils.MethodUtils;
 import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -41,10 +41,10 @@ public class TramoService {
     }
 
     public TramoDto create(TramoCreateUpdateDto dto){
-        CompressionTools.validateDates(dto.getGoOut(), dto.getEnter());
+        MethodUtils.validateDates(dto.getGoOut(), dto.getEnter());
 
         List<Tramo> existTr = trRepo.findAll();
-        CompressionTools.validateNoOvverlap(dto.getGoOut(),dto.getEnter(),existTr);
+        MethodUtils.validateNoOvverlap(dto.getGoOut(),dto.getEnter(),existTr);
 
         Tramo tr = Tramo.builder()
                 .goOut(dto.getGoOut())
@@ -61,9 +61,9 @@ public class TramoService {
                         HttpStatus.NOT_FOUND,
                         HttpMessage.NOT_FOUND_TR
                 ));
-        CompressionTools.validateDates(dto.getGoOut(), dto.getEnter());
+        MethodUtils.validateDates(dto.getGoOut(), dto.getEnter());
         List<Tramo> otherTr = trRepo.findAll();
-        CompressionTools.validateNoOvverlap(dto.getGoOut(),dto.getEnter(),otherTr);
+        MethodUtils.validateNoOvverlap(dto.getGoOut(),dto.getEnter(),otherTr);
 
         tr.setGoOut(dto.getGoOut());
         tr.setEnter(dto.getEnter());

@@ -2,9 +2,12 @@ package com.example.apihermandad.application.services;
 
 import com.example.apihermandad.application.dto.UsuarioCreateDto;
 import com.example.apihermandad.application.dto.UsuarioDto;
+import com.example.apihermandad.application.dto.UsuarioSelfUpdateDto;
 import com.example.apihermandad.application.mapper.UsuarioMapper;
 import com.example.apihermandad.domain.entity.Usuario;
 import com.example.apihermandad.domain.repository.UsuarioRepository;
+
+import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +26,7 @@ public class UsuarioService {
         this.userMapper = userMapper;
     }
 
-    //endpoint privado
+
     public List<UsuarioDto> findAll() {
         return userRepository.findAll()
                 .stream()
@@ -31,20 +34,34 @@ public class UsuarioService {
                 .toList();
     }
 
-    //endpoint privado
+
     public UsuarioDto findById(Integer id) {
         return userRepository.findById(id)
                 .map(userMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
-    //solo admin y junta
+
     public UsuarioDto create(UsuarioCreateDto dto) {
         Usuario user = userMapper.toCreateEntity(dto);
         return userMapper.toDto(userRepository.save(user));
     }
 
-    // admin y junta
+    public UsuarioDto updateSelf(Integer id, UsuarioSelfUpdateDto dto){
+        Usuario user=userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.NOT_FOUND_USSER
+                ));
+        user.setEmail(dto.getEmail());
+        user.setPhone(dto.getPhone());
+        user.setAddress(dto.getAddress());
+
+        return userMapper.toDto(userRepository.save(user));
+
+    }
+
+
     @Transactional
     public UsuarioDto update(Integer id, UsuarioDto dto) {
 
@@ -52,7 +69,7 @@ public class UsuarioService {
                 .orElseThrow(() ->
                         new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "Usuario no encontrado"
+                                HttpMessage.NOT_FOUND_USSER
                         )
                 );
 
@@ -67,7 +84,7 @@ public class UsuarioService {
         return userMapper.toDto(userRepository.save(usuario));
     }
 
-    //solo admin y junta
+
     public void invalidate(Integer id) {
         Usuario user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

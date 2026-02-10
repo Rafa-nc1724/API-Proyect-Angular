@@ -2,7 +2,7 @@ package com.example.apihermandad.application.services;
 
 import com.example.apihermandad.domain.entity.Image;
 import com.example.apihermandad.domain.repository.ImageRepository;
-import com.example.apihermandad.utils.CompressionTools;
+import com.example.apihermandad.utils.MethodUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +45,7 @@ public class ImageService {
 
         try {
             byte[] bytes = file.getBytes();
-            String base64Compressed = CompressionTools.comprimirABase64(bytes);
+            String base64Compressed = MethodUtils.comprimirABase64(bytes);
 
             Image image = new Image();
             image.setName(generateUniqueName(file.getOriginalFilename()));
@@ -73,7 +73,7 @@ public class ImageService {
                 ));
 
         try {
-            byte[] bytes = CompressionTools.descomprimirDeBase64(image.getBase64());
+            byte[] bytes = MethodUtils.descomprimirDeBase64(image.getBase64());
             return new ImageData(image.getType(), bytes);
 
         } catch (IOException e) {
