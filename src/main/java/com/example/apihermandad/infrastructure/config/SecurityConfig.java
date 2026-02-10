@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/news").permitAll()
                         .requestMatchers(HttpMethod.GET, "/image/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/events/month").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
 
                         // Todo lo demás, protegido

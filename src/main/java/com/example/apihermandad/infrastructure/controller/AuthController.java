@@ -25,10 +25,7 @@ public class AuthController {
         this.usuarioMapper = usuarioMapper;
     }
 
-    /**
-     * POST api/auth/login
-     */
-    @Operation(security = {})
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(
             @RequestBody LoginRequestDto request,
@@ -36,7 +33,8 @@ public class AuthController {
 
         return ResponseEntity.ok(authService.login(request, httpRequest));
     }
-    @Operation(security = {})
+
+
     @GetMapping("/me")
     public UsuarioDto me(Authentication authentication) {
         Usuario usuario = (Usuario) authentication.getPrincipal();

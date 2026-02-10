@@ -21,19 +21,19 @@ public class GrupoController {
         this.grupoService = grupoService;
     }
 
-    // 🔐 Autenticado
+
     @GetMapping
     public ResponseEntity<List<GrupoDto>> findAll() {
         return ResponseEntity.ok(grupoService.findAll());
     }
 
-    // 🔐 Autenticado
+
     @GetMapping("/{id}")
     public ResponseEntity<GrupoDto> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(grupoService.findById(id));
     }
 
-    // 🔐 ADMIN
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GrupoDto> create(
@@ -48,7 +48,7 @@ public class GrupoController {
         return ResponseEntity.ok(grupoService.create(dto, image));
     }
 
-    // 🔐 ADMIN
+
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GrupoDto> update(
@@ -59,7 +59,7 @@ public class GrupoController {
         return ResponseEntity.ok(grupoService.update(id, dto, image));
     }
 
-    // 🔐 ADMIN
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {

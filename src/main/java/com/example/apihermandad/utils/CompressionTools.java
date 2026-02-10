@@ -1,5 +1,6 @@
 package com.example.apihermandad.utils;
 
+import com.example.apihermandad.application.dto.EventoDto;
 import com.example.apihermandad.domain.entity.Tramo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,6 +18,7 @@ public class CompressionTools {
 
     // Para prevenir que alguien instancie la clase
     private CompressionTools() {}
+
 
     // Comprimir bytes de imagen -> String base64 comprimido (para BD)
     public static String comprimirABase64(byte[] bytesImagen) throws IOException {
@@ -72,4 +74,5 @@ public class CompressionTools {
             );
         }
     }
+
 }

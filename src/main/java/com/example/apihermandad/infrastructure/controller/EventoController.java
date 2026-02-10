@@ -19,60 +19,36 @@ public class EventoController {
         this.eventoService = eventoService;
     }
 
-    /**
-     * GET /api/events
-     * Endpoint público
-     */
-    @Operation(security = {})
-    @GetMapping
+
+    @GetMapping("/month")
+    public ResponseEntity<List<EventoDto>> findByMonth(
+            @RequestParam Integer year,
+            @RequestParam Integer month
+    ){
+        return ResponseEntity.ok(eventoService.getEventosByMonth(year, month));
+    }
+
+
+    @GetMapping("/all")
     public List<EventoDto> getAllEventos() {
         return eventoService.getAllEventos();
     }
 
-    /**
-     * POST /api/events
-     * Ejemplo: http://localhost:8080/api/events
-     * Body:
-     * {
-     *   "titulo": "Ensayo general de la virgen",
-     *   "descripcion": "Se realizará en la calle Trasmonjas",
-     *   "fecha": "2026-02-12",
-     *   "grupoId": 8
-     * }
-     * Headers:
-     * Authorization-->Bearer "token del admin, junta o capataz"
-     * EndPoint privado
-     */
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
     public ResponseEntity<EventoDto> create(@RequestBody EventoDto dto) {
         return ResponseEntity.ok(eventoService.create(dto));
     }
 
-    /**
-     * PUT /api/events
-     * Ejemplo:http://localhost:8080/api/events/7
-     * Body:{
-     *   "titulo": "Ensayo general de la virgen",
-     *   "descripcion": "Se realizará en la palaza de San Pedro",
-     *   "fecha": "2026-02-12",
-     *   "grupoId": 8
-     * }
-     * Headers:
-     * Authorization-->Bearer "token del admin, junta o capataz"
-     * Endpoint privadao
-     */
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
     public ResponseEntity<EventoDto> update(@PathVariable Integer id, @RequestBody EventoDto dto) {
         return ResponseEntity.ok(eventoService.update(id,dto));
     }
 
-    /**
-     * DELETE /api/events
-     * Ejemplo:http://localhost:8080/api/events/7
-     * Endpoint provado
-     */
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','JUNTA','CAPATAZ')")
     public ResponseEntity<EventoDto> delete(@PathVariable Integer id) {

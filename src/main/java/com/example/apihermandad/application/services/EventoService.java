@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -75,5 +76,23 @@ public class EventoService {
             );
         }
         eventoRepository.deleteById(id);
+    }
+
+    public List<EventoDto> getEventosByMonth(int year, int month) {
+
+        if (month < 1 || month > 12) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El mes debe estar entre 1 y 12"
+            );
+        }
+
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        return eventoRepository.findByFechaBetween(start, end)
+                .stream()
+                .map(eventoMapper::toDto)
+                .toList();
     }
 }

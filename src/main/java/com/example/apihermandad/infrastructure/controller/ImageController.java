@@ -15,10 +15,7 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    /**
-     * Endpoint público
-     * GET /image/{id}
-     */
+
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable Integer id) {
 
