@@ -1,5 +1,6 @@
 package com.example.apihermandad.infrastructure.controller;
 
+import com.example.apihermandad.application.dto.ChangePasswordDto;
 import com.example.apihermandad.application.dto.UsuarioCreateDto;
 import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.application.dto.UsuarioSelfUpdateDto;
@@ -66,6 +67,18 @@ class UsuarioController {
 
         return ResponseEntity.ok(userService.updateSelf(user.getId(),dto));
 
+    }
+
+
+    @PutMapping("/me/password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> updatePassword(
+            Authentication auth,
+            @RequestBody ChangePasswordDto dto
+    ){
+        Usuario user = (Usuario) auth.getPrincipal();
+        userService.changePassword(user.getId(),dto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

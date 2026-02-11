@@ -1,14 +1,17 @@
 package com.example.apihermandad.application.services;
 
+import com.example.apihermandad.application.dto.ChangePasswordDto;
 import com.example.apihermandad.application.dto.UsuarioCreateDto;
 import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.application.dto.UsuarioSelfUpdateDto;
 import com.example.apihermandad.application.mapper.UsuarioMapper;
 import com.example.apihermandad.domain.entity.Usuario;
+import com.example.apihermandad.domain.repository.SesionRepository;
 import com.example.apihermandad.domain.repository.UsuarioRepository;
 
 import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,11 +22,15 @@ import java.util.List;
 public class UsuarioService {
     private final UsuarioRepository userRepository;
     private final UsuarioMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final SesionRepository sesionRepository;
 
 
-    UsuarioService(UsuarioRepository userRepository, UsuarioMapper userMapper) {
+    UsuarioService(UsuarioRepository userRepository, UsuarioMapper userMapper, PasswordEncoder passwordEncoder, SesionRepository sesionRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.sesionRepository = sesionRepository;
     }
 
 
@@ -93,5 +100,44 @@ public class UsuarioService {
         userRepository.save(user);
     }
 
+
+    @Transactional
+    public void changePassword(
+            Integer authenticatedUserId,
+            ChangePasswordDto dto
+    ) {
+
+        Usuario user = userRepository.findById(authenticatedUserId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuario no encontrado"
+                ));
+
+        if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La contraseña actual no es correcta"
+            );
+        }
+
+        if (!dto.newPassword().equals(dto.confirmPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La nueva contraseña no coincide"
+            );
+        }
+
+        if (passwordEncoder.matches(dto.newPassword(), user.getPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La nueva contraseña no puede ser igual a la anterior"
+            );
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+        userRepository.save(user);
+
+        sesionRepository.invalidateAllByUserId(user.getId());
+    }
 
 }
