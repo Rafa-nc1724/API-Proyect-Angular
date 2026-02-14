@@ -5,7 +5,6 @@ import com.example.apihermandad.domain.entity.Image;
 import com.example.apihermandad.domain.repository.ImageRepository;
 import com.example.apihermandad.utils.HttpMessage;
 import com.example.apihermandad.utils.MethodUtils;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.*;
 import java.io.IOException;
 
 @RestController

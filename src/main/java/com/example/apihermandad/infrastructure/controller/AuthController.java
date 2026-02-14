@@ -6,7 +6,6 @@ import com.example.apihermandad.application.dto.UsuarioDto;
 import com.example.apihermandad.application.mapper.UsuarioMapper;
 import com.example.apihermandad.application.services.AuthService;
 import com.example.apihermandad.domain.entity.Usuario;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

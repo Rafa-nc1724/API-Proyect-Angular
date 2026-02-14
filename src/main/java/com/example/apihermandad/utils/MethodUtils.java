@@ -52,7 +52,6 @@ public class MethodUtils {
 
     public static void validateNoOvverlap(LocalDate goOut, LocalDate enter, List<Tramo> existingTramos){
         for (Tramo tr : existingTramos){
-            LocalDate existGoOut =tr.getGoOut();
             LocalDate existEnter = tr.getEnter();
 
             if(!goOut.isAfter(existEnter.plusDays(1)) &&

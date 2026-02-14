@@ -20,9 +20,6 @@ public class TramoGrupoUsuarioService {
     private final GrupoRepository grupoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    /* ===============================
-       ASIGNAR USUARIO A GRUPO/TRAMO
-       =============================== */
 
     public void assignUsuarioToGrupoTramo(
             Integer tramoId,
@@ -30,7 +27,6 @@ public class TramoGrupoUsuarioService {
             Integer usuarioId
     ) {
 
-        // Regla: un usuario solo puede estar una vez en un grupo y tramo
         if (repository.existsByTramo_IdAndUsuario_Id(tramoId, usuarioId)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -64,9 +60,6 @@ public class TramoGrupoUsuarioService {
         repository.save(tgu);
     }
 
-    /* ===============================
-       USUARIOS DEL GRUPO Y TRAMO
-       =============================== */
 
     public List<UsuarioLiteDto> getUsuariosByGrupoAndTramo(
             Integer grupoId,
@@ -75,9 +68,6 @@ public class TramoGrupoUsuarioService {
         return repository.findUsuariosByGrupoAndTramo(grupoId, tramoId);
     }
 
-    /* ===============================
-       USUARIOS NO ASIGNADOS
-       =============================== */
 
     public List<UsuarioLiteDto> getUsuariosNotInGrupoAndTramo(
             Integer grupoId,
@@ -86,9 +76,6 @@ public class TramoGrupoUsuarioService {
         return repository.findUsuariosNotInGrupoAndTramo(grupoId, tramoId);
     }
 
-    /* ===============================
-       ELIMINAR ASIGNACIÓN
-       =============================== */
 
     public void removeUsuarioFromGrupoTramo(
             Integer tramoId,

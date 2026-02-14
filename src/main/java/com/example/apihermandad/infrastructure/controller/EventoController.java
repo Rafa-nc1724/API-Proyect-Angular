@@ -4,9 +4,7 @@ import com.example.apihermandad.application.dto.EventoCreateUpdateDto;
 import com.example.apihermandad.application.dto.EventoDto;
 import com.example.apihermandad.application.services.EventoService;
 import com.example.apihermandad.infrastructure.security.AllEditRoles;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

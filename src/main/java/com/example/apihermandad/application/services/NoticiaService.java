@@ -11,7 +11,6 @@ import com.example.apihermandad.utils.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -23,13 +22,13 @@ public class NoticiaService {
     private final NoticiaRepository noticiaRepository;
     private final NoticiaMapper noticiaMapper;
     private final ImageService imageService;
-    private final ImageRepository imageRepository;
+
 
     NoticiaService(NoticiaRepository noticiaRepository, NoticiaMapper noticiaMapper, ImageService imageService, ImageRepository imageRepository) {
         this.noticiaRepository = noticiaRepository;
         this.noticiaMapper = noticiaMapper;
         this.imageService = imageService;
-        this.imageRepository = imageRepository;
+
     }
 
     public List<NoticiaDto> findAll() {
@@ -84,13 +83,10 @@ public class NoticiaService {
                             HttpMessage.NOT_FOUND_IMG
                     ));
 
-            // 1️⃣ Asociar la nueva imagen
             noticia.setImage(newImage);
 
-            // 2️⃣ Guardar la noticia (libera la FK antigua)
             noticiaRepository.save(noticia);
 
-            // 3️⃣ Borrar la imagen antigua
             if (oldImage != null) {
                 imageService.deleteImage(oldImage);
             }
@@ -110,18 +106,15 @@ public class NoticiaService {
 
         Image image = noticia.getImage();
 
-        // 1️⃣ Romper la relación
         if (image != null) {
             noticia.setImage(null);
             noticiaRepository.save(noticia);
         }
 
-        // 2️⃣ Borrar imagen
         if (image != null) {
             imageService.deleteImage(image);
         }
 
-        // 3️⃣ Borrar noticia
         noticiaRepository.delete(noticia);
     }
 }

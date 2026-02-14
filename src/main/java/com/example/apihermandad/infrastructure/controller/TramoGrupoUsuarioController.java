@@ -4,7 +4,6 @@ import com.example.apihermandad.application.dto.TramoGrupoUsuarioCreateDto;
 import com.example.apihermandad.application.dto.UsuarioLiteDto;
 import com.example.apihermandad.application.services.TramoGrupoUsuarioService;
 import com.example.apihermandad.infrastructure.security.AllEditRoles;
-import com.example.apihermandad.infrastructure.security.AllowedRoles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

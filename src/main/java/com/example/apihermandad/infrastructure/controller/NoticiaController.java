@@ -3,18 +3,10 @@ package com.example.apihermandad.infrastructure.controller;
 import com.example.apihermandad.application.dto.NoticiaCreateUpdateDto;
 import com.example.apihermandad.application.dto.NoticiaDto;
 import com.example.apihermandad.application.services.NoticiaService;
-import com.example.apihermandad.domain.repository.NoticiaRepository;
 import com.example.apihermandad.infrastructure.security.AllowedRoles;
-import jakarta.validation.Valid;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

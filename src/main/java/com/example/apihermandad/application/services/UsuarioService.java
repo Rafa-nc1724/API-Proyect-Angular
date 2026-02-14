@@ -50,7 +50,9 @@ public class UsuarioService {
     public UsuarioDto findById(Integer id) {
         return userRepository.findById(id)
                 .map(userMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.NOT_FOUND_USSER));
     }
 
     @Transactional
@@ -100,7 +102,9 @@ public class UsuarioService {
 
     public void invalidate(Integer id) {
         Usuario user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.NOT_FOUND_USSER));
 
         user.setActive(false);
         userRepository.save(user);
@@ -114,7 +118,7 @@ public class UsuarioService {
         Usuario user = userRepository.findById(authenticatedUserId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Usuario no encontrado"));
+                        HttpMessage.NOT_FOUND_USSER));
 
         if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
             throw new ResponseStatusException(
