@@ -23,11 +23,11 @@ class NoticiaController {
 
 
     private final NoticiaService noticiaService;
-    private final NoticiaRepository noticiaRepository;
 
-    NoticiaController(NoticiaService noticiaService, NoticiaRepository noticiaRepository) {
+
+    NoticiaController(NoticiaService noticiaService ) {
         this.noticiaService = noticiaService;
-        this.noticiaRepository = noticiaRepository;
+
     }
 
     @GetMapping("/all")
@@ -40,39 +40,24 @@ class NoticiaController {
         return ResponseEntity.ok(noticiaService.findById(id));
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     @AllowedRoles
     public ResponseEntity<NoticiaDto> create(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-            @RequestPart(value = "image", required = false) MultipartFile image
+            @RequestBody NoticiaCreateUpdateDto dto
     ) {
-        NoticiaCreateUpdateDto dto = NoticiaCreateUpdateDto.builder()
-                .title(title)
-                .description(description)
-                .fecha(fecha)
-                .build();
-
-        return ResponseEntity.ok(noticiaService.create(dto, image));
+        return ResponseEntity.ok(noticiaService.create(dto));
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
+    @PutMapping("/{id}")
     @AllowedRoles
     public ResponseEntity<NoticiaDto> update(
             @PathVariable Integer id,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-            @RequestPart(value = "image", required = false) MultipartFile image
+            @RequestBody NoticiaCreateUpdateDto dto
     ) {
-        NoticiaCreateUpdateDto dto = NoticiaCreateUpdateDto.builder()
-                .title(title)
-                .description(description)
-                .fecha(fecha)
-                .build();
-        return ResponseEntity.ok(noticiaService.update(dto, id, image));
+        return ResponseEntity.ok(noticiaService.update(dto, id));
     }
+
 
     @DeleteMapping("/{id}")
     @AllowedRoles

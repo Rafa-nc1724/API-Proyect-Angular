@@ -15,7 +15,6 @@ import java.time.LocalDate;
 public class NoticiaDto implements Serializable {
     private Integer id;
     private String title;
-    private LocalDate fecha;
     private String description;
-    private String image_id; // /image/{id}
+    private Integer imageId;
 }

@@ -3,6 +3,8 @@ package com.example.apihermandad.infrastructure.controller;
 import com.example.apihermandad.application.dto.GrupoCreateUpdateDto;
 import com.example.apihermandad.application.dto.GrupoDto;
 import com.example.apihermandad.application.services.GrupoService;
+import com.example.apihermandad.infrastructure.security.AllEditRoles;
+import com.example.apihermandad.infrastructure.security.AllowedRoles;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,34 +31,28 @@ public class GrupoController {
 
 
     @GetMapping("/{id}")
+    @AllEditRoles
     public ResponseEntity<GrupoDto> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(grupoService.findById(id));
     }
 
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GrupoDto> create(
-            @RequestParam("name") String name,
-            @RequestParam("description") String description,
-            @RequestPart(value = "image", required = false) MultipartFile image
+            @RequestBody GrupoCreateUpdateDto dto
     ) {
-        GrupoCreateUpdateDto dto = new GrupoCreateUpdateDto();
-        dto.setName(name);
-        dto.setDescription(description);
-
-        return ResponseEntity.ok(grupoService.create(dto, image));
+        return ResponseEntity.ok(grupoService.create(dto));
     }
 
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GrupoDto> update(
             @PathVariable Integer id,
-            @RequestPart("data") GrupoCreateUpdateDto dto,
-            @RequestPart(value = "image", required = false) MultipartFile image
+            @RequestBody GrupoCreateUpdateDto dto
     ) {
-        return ResponseEntity.ok(grupoService.update(id, dto, image));
+        return ResponseEntity.ok(grupoService.update(id, dto));
     }
 
 

@@ -11,5 +11,5 @@ public class GrupoDto {
     private Integer id;
     private String name;
     private String description;
-    private String image_id; // /image/{id}
+    private Integer imageId;
 }

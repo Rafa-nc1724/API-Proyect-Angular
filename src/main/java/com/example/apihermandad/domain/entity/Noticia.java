@@ -25,8 +25,7 @@ public class Noticia {
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @NotNull
-    @Column(name = "fecha", nullable = false)
+    @Column(name = "fecha", insertable = false)
     private LocalDate fecha;
 
     @NotNull
@@ -34,8 +33,9 @@ public class Noticia {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name="image_id", length = 100)
-    private String image_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
 
 }

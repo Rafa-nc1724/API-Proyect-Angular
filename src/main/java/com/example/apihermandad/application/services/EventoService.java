@@ -20,16 +20,18 @@ public class EventoService {
 
     private final EventoRepository eventoRepository;
     private final EventoMapper eventoMapper;
-    private final GrupoRepository grRepository;
+    private final GrupoRepository grupoRepository;
 
-    public EventoService(EventoRepository eventoRepository,
-                         EventoMapper eventoMapper, GrupoRepository grRepository) {
+    public EventoService(
+            EventoRepository eventoRepository,
+            EventoMapper eventoMapper,
+            GrupoRepository grupoRepository
+    ) {
         this.eventoRepository = eventoRepository;
         this.eventoMapper = eventoMapper;
-        this.grRepository = grRepository;
+        this.grupoRepository = grupoRepository;
     }
 
-    //Este servicio es el único público
     public List<EventoDto> getAllEventos() {
         return eventoRepository.findAll()
                 .stream()
@@ -37,46 +39,52 @@ public class EventoService {
                 .toList();
     }
 
+    public EventoDto create(EventoCreateUpdateDto dto) {
 
-    public EventoDto create(EventoCreateUpdateDto dto){
-
-        Grupo grup = grRepository.findByName(dto.groupName())
-                .orElseThrow(()-> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        HttpMessage.NOT_FOUND_GROUP
-                ));
-
-        Evento event = Evento.builder()
+        Evento.EventoBuilder builder = Evento.builder()
                 .title(dto.title())
                 .description(dto.description())
-                .fecha(dto.fecha())
-                .id_group(grup)
-                .build();
+                .fecha(dto.fecha());
 
-        return eventoMapper.toDto(eventoRepository.save(event));
+        // 👉 SOLO si viene grupoId
+        if (dto.grupoId() != null) {
+            Grupo grupo = grupoRepository.findById(dto.grupoId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            HttpMessage.NOT_FOUND_GROUP
+                    ));
+            builder.grupo(grupo);
+        }
+
+        Evento evento = builder.build();
+        return eventoMapper.toDto(eventoRepository.save(evento));
     }
 
     public EventoDto update(Integer id, EventoCreateUpdateDto dto) {
-        Evento event = eventoRepository.findById(id)
+
+        Evento evento = eventoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         HttpMessage.NOT_FOUND_NOTICE
                 ));
 
-        Grupo grup = grRepository.findByName(dto.groupName())
-                        .orElseThrow(()-> new ResponseStatusException(
-                                HttpStatus.BAD_REQUEST,
-                                HttpMessage.NOT_FOUND_GROUP
-                        ));
+        evento.setTitle(dto.title());
+        evento.setDescription(dto.description());
+        evento.setFecha(dto.fecha());
 
-        event.builder()
-                .title(dto.title())
-                .description(dto.description())
-                .fecha(dto.fecha())
-                .id_group(grup)
-                .build();
+        // 👉 grupo opcional
+        if (dto.grupoId() == null) {
+            evento.setGrupo(null); // permitir quitar grupo
+        } else {
+            Grupo grupo = grupoRepository.findById(dto.grupoId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
+                            HttpMessage.NOT_FOUND_GROUP
+                    ));
+            evento.setGrupo(grupo);
+        }
 
-        return eventoMapper.toDto(eventoRepository.save(event));
+        return eventoMapper.toDto(eventoRepository.save(evento));
     }
 
     public void delete(Integer id) {

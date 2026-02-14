@@ -26,10 +26,9 @@ public class Evento {
     @Column(name = "description", nullable = false, length = 100)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_grupo")
-    private Grupo id_group;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_grupo", nullable = false)
+    private Grupo grupo;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;

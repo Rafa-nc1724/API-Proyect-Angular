@@ -39,15 +39,19 @@ public class EventoController {
 
     @PostMapping
     @AllEditRoles
-    public ResponseEntity<EventoDto> create(@RequestBody EventoCreateUpdateDto dto) {
+    public ResponseEntity<EventoDto> create(
+            @RequestBody EventoCreateUpdateDto dto
+    ) {
         return ResponseEntity.ok(eventoService.create(dto));
     }
 
-
     @PutMapping("/{id}")
     @AllEditRoles
-    public ResponseEntity<EventoDto> update(@PathVariable Integer id, @RequestBody EventoCreateUpdateDto dto) {
-        return ResponseEntity.ok(eventoService.update(id,dto));
+    public ResponseEntity<EventoDto> update(
+            @PathVariable Integer id,
+            @RequestBody EventoCreateUpdateDto dto
+    ) {
+        return ResponseEntity.ok(eventoService.update(id, dto));
     }
 
 

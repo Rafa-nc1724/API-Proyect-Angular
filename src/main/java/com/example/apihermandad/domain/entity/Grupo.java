@@ -26,11 +26,7 @@ public class Grupo {
     @Column(name = "description")
     private String description;
 
-    /**
-     * Ruta lógica de la imagen:
-     * Ejemplo: /image/12
-     * Puede ser null (grupo sin imagen)
-     */
-    @Column(name = "image_id")
-    private String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

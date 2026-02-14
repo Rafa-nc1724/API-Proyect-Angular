@@ -7,7 +7,7 @@ public record EventoDto(
         String title,
         String description,
         LocalDate fecha,
-        Integer id_group,
-        String groupName
+        Integer grupoId,
+        String grupoNombre
 ) {
 }

@@ -7,5 +7,5 @@ public record EventoCreateUpdateDto (
     String title,
     String description,
     LocalDate fecha,
-    String groupName
+    Integer grupoId
 ){}

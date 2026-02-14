@@ -1,7 +1,6 @@
 package com.example.apihermandad.application.dto;
 
 import lombok.*;
-import java.time.LocalDate;
 
 
 
@@ -14,5 +13,5 @@ import java.time.LocalDate;
 public class NoticiaCreateUpdateDto {
     private String title;
     private String description;
-    private LocalDate fecha;
+    private Integer imageId;
 }

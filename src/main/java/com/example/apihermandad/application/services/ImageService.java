@@ -2,31 +2,28 @@ package com.example.apihermandad.application.services;
 
 import com.example.apihermandad.domain.entity.Image;
 import com.example.apihermandad.domain.repository.ImageRepository;
+import com.example.apihermandad.utils.HttpMessage;
 import com.example.apihermandad.utils.MethodUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
-
+@RequiredArgsConstructor
 @Service
 public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    public ImageService(ImageRepository imageRepository) {
-        this.imageRepository = imageRepository;
-    }
-
-    private String generateUniqueName(String originalName) {
-        return UUID.randomUUID() + "_" + originalName;
-    }
 
     public record ImageData(String contentType, byte[] bytes) {}
 
-    public String saveImage(MultipartFile file) {
+
+    public Image saveImage(MultipartFile file) {
 
         if (file == null || file.isEmpty()) {
             throw new ResponseStatusException(
@@ -52,9 +49,7 @@ public class ImageService {
             image.setType(contentType);
             image.setBase64(base64Compressed);
 
-            Image saved = imageRepository.save(image);
-
-            return "/image/" + saved.getId();
+            return imageRepository.save(image);
 
         } catch (IOException e) {
             throw new ResponseStatusException(
@@ -64,17 +59,24 @@ public class ImageService {
         }
     }
 
+    public Optional<Image> getImageById(Integer imageId) {
+        return imageRepository.findById(imageId);
+
+    }
+
     public ImageData loadImage(Integer id) {
 
-        Image image = imageRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Imagen no encontrada"
-                ));
+        Optional<Image> image = getImageById(id);
+
+        if (image.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    HttpMessage.NOT_FOUND_IMG);
+        }
 
         try {
-            byte[] bytes = MethodUtils.descomprimirDeBase64(image.getBase64());
-            return new ImageData(image.getType(), bytes);
+            byte[] bytes = MethodUtils.descomprimirDeBase64(image.get().getBase64());
+            return new ImageData(image.get().getType(), bytes);
 
         } catch (IOException e) {
             throw new ResponseStatusException(
@@ -84,17 +86,18 @@ public class ImageService {
         }
     }
 
-   public void deleteImageByPath(String imgPath){
-        if(imgPath == null || imgPath.isBlank()){
+   public void deleteImage(Image img){
+        if(img == null){
             return;
         }
-        String[] parts = imgPath.split("/");
-        if(parts.length !=3){
-            return;
+
+        if (imageRepository.existsById(img.getId())) {
+            imageRepository.deleteById(img.getId());
         }
-        try{
-            Integer imgId = Integer.valueOf(parts[2]);
-            imageRepository.deleteById(imgId);
-        }catch (NumberFormatException ignored){}
    }
+
+    private String generateUniqueName(String originalName) {
+        return UUID.randomUUID() + "_" + originalName;
+    }
+
 }

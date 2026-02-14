@@ -11,4 +11,5 @@ import lombok.*;
 public class GrupoCreateUpdateDto {
     private String name;
     private String description;
+    private Integer imageId;
 }
