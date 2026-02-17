@@ -19,9 +19,6 @@ public class TramoGrupoUsuarioController {
         this.service = service;
     }
 
-    /* ===============================
-       ASIGNAR USUARIO A GRUPO/TRAMO
-       =============================== */
 
     @PostMapping
     @AllEditRoles
@@ -36,9 +33,6 @@ public class TramoGrupoUsuarioController {
         return ResponseEntity.ok().build();
     }
 
-    /* ===============================
-       USUARIOS DEL GRUPO Y TRAMO
-       =============================== */
 
     @GetMapping("/usuarios")
     @AllEditRoles
@@ -51,9 +45,6 @@ public class TramoGrupoUsuarioController {
         );
     }
 
-    /* ===============================
-       USUARIOS DISPONIBLES
-       =============================== */
 
     @GetMapping("/usuarios-disponibles")
     @AllEditRoles
@@ -66,9 +57,6 @@ public class TramoGrupoUsuarioController {
         );
     }
 
-    /* ===============================
-       ELIMINAR ASIGNACIÓN
-       =============================== */
 
     @DeleteMapping
     @AllEditRoles
