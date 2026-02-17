@@ -107,8 +107,8 @@ LOCK TABLES `tramo` WRITE;
 set autocommit=0;
 INSERT INTO `tramo` VALUES
                         (2,'2026-02-10','2026-02-10','Salida procesional del Martes'),
-                        (5,'2026-02-12','2026-02-12','Martes2'),
-                        (7,'2026-02-16','2026-02-16','Martes2');
+                        (5,'2026-02-12','2026-02-12','Martes'),
+                        (7,'2026-02-16','2026-02-16','Miercoles');
 /*!40000 ALTER TABLE `tramo` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;

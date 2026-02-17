@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/hermandad
+    username: hermandad
+    password: hermandad
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8080
