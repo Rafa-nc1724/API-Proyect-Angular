@@ -6,6 +6,8 @@ services:
       MARIADB_DATABASE: hermandad
       MARIADB_USER: hermandad
       MARIADB_PASSWORD: hermandad
+      MYSQL_STRICT_TRANS_TABLES: false
+      MYSQL_INNODB_STRICT_MODE: false
     ports:
       - "3306:3306"
     volumes:
