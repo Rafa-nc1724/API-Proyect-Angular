@@ -44,11 +44,9 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // Endpoints públicos
-                        .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/news/all").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/news/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/news/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/image/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/events/month").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
 
                         // Todo lo demás, protegido

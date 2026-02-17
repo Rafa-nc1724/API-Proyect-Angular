@@ -1,5 +1,6 @@
 package com.example.apihermandad.infrastructure.controller;
 
+import com.example.apihermandad.application.dto.ImageIdDto;
 import com.example.apihermandad.application.services.ImageService;
 import com.example.apihermandad.domain.entity.Image;
 import com.example.apihermandad.domain.repository.ImageRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
+
 @RestController
 @RequestMapping("/api/image")
 public class ImageController {
@@ -26,12 +28,15 @@ public class ImageController {
         this.imageRepository = imageRepository;
     }
 
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Integer> createImage(
+    public ResponseEntity<ImageIdDto> createImage(
             @RequestPart MultipartFile image
     ) {
         Image savedImage = imageService.saveImage(image);
-        return ResponseEntity.ok(savedImage.getId());
+        ImageIdDto result = new ImageIdDto(savedImage.getId());
+
+        return ResponseEntity.ok(result);
     }
 
 
