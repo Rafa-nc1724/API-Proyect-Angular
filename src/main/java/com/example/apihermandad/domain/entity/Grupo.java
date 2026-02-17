@@ -22,7 +22,7 @@ public class Grupo {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Lob
+
     @Column(name = "description")
     private String description;
 
