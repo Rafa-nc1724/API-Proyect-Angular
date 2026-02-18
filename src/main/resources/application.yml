@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:mariadb://localhost:3306/hermandad
-    username: dwes
-    password: abc123.
+    username: hermandad
+    password: hermandad
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
@@ -24,7 +24,11 @@ spring:
           auth: true
           starttls:
             enable: true
-
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+      
 jwt:
   secret: r4Z8nM5v8ZbYx6PpQq0Z0ZQf5wK2Q8rJZcGZpR2Gx2k=
   expiration: 86400000
