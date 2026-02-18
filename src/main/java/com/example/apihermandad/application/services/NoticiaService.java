@@ -85,12 +85,12 @@ public class NoticiaService {
 
             noticia.setImage(newImage);
 
-            noticiaRepository.save(noticia);
-
             if (oldImage != null) {
                 imageService.deleteImage(oldImage);
             }
         }
+
+        noticiaRepository.save(noticia);
 
         return noticiaMapper.toDto(noticia);
     }
