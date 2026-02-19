@@ -9,7 +9,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface GrupoMapper {
 
-    @Mapping(target = "imageUrl", expression = "java(\"/api/image/\" + grupo.getImage().getId())")
+    @Mapping(target = "imageUrl", expression = "java(grupo.getImage() != null ? \"/api/image/\" + grupo.getImage().getId() : null)")
     GrupoDto toDto(Grupo grupo);
 
 }
