@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GrupoService {
@@ -54,12 +55,8 @@ public class GrupoService {
         grupo.setDescription(dto.getDescription());
 
         if (dto.getImageId() != null) {
-            Image image = imageService.getImageById(dto.getImageId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            HttpMessage.NOT_FOUND_IMG
-                    ));
-            grupo.setImage(image);
+            Optional<Image> imageId = imageService.getImageById(dto.getImageId());
+            imageId.ifPresent(grupo::setImage);
         }
 
         return grupoMapper.toDto(grupoRepository.save(grupo));
@@ -77,26 +74,22 @@ public class GrupoService {
         grupo.setName(dto.getName());
         grupo.setDescription(dto.getDescription());
 
-        // Cambio de imagen
+
         if (dto.getImageId() != null) {
 
-            // 1️⃣ Desvincular imagen antigua
             Image oldImage = grupo.getImage();
-            grupo.setImage(null);
-            grupoRepository.save(grupo);
 
-            // 2️⃣ Eliminar imagen antigua
-            if (oldImage != null) {
-                imageService.deleteImage(oldImage);
-            }
-
-            // 3️⃣ Vincular nueva imagen
             Image newImage = imageService.getImageById(dto.getImageId())
                     .orElseThrow(() -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
                             HttpMessage.NOT_FOUND_IMG
                     ));
+
             grupo.setImage(newImage);
+
+            if (oldImage != null) {
+                imageService.deleteImage(oldImage);
+            }
         }
 
         return grupoMapper.toDto(grupoRepository.save(grupo));
@@ -113,8 +106,10 @@ public class GrupoService {
 
         Image image = grupo.getImage();
 
-        grupo.setImage(null);
-        grupoRepository.save(grupo);
+        if (image != null) {
+            grupo.setImage(null);
+            grupoRepository.save(grupo);
+        }
 
         if (image != null) {
             imageService.deleteImage(image);

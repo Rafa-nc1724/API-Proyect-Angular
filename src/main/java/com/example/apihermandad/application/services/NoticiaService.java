@@ -24,7 +24,11 @@ public class NoticiaService {
     private final ImageService imageService;
 
 
-    NoticiaService(NoticiaRepository noticiaRepository, NoticiaMapper noticiaMapper, ImageService imageService, ImageRepository imageRepository) {
+    NoticiaService(
+            NoticiaRepository noticiaRepository,
+            NoticiaMapper noticiaMapper,
+            ImageService imageService
+    ) {
         this.noticiaRepository = noticiaRepository;
         this.noticiaMapper = noticiaMapper;
         this.imageService = imageService;

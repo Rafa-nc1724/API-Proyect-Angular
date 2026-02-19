@@ -53,7 +53,7 @@ class NoticiaController {
 
     @DeleteMapping("/{id}")
     @AllowedRoles
-    public ResponseEntity<NoticiaDto> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         noticiaService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -4,6 +4,7 @@ import com.example.apihermandad.application.dto.GrupoCreateUpdateDto;
 import com.example.apihermandad.application.dto.GrupoDto;
 import com.example.apihermandad.application.services.GrupoService;
 import com.example.apihermandad.infrastructure.security.AllEditRoles;
+import com.example.apihermandad.infrastructure.security.AllowedRoles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class GrupoController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @AllowedRoles
     public ResponseEntity<GrupoDto> create(
             @RequestBody GrupoCreateUpdateDto dto
     ) {
@@ -44,7 +45,7 @@ public class GrupoController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @AllowedRoles
     public ResponseEntity<GrupoDto> update(
             @PathVariable Integer id,
             @RequestBody GrupoCreateUpdateDto dto
@@ -54,7 +55,7 @@ public class GrupoController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @AllowedRoles
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         grupoService.delete(id);
         return ResponseEntity.noContent().build();
