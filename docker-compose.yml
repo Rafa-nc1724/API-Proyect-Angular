@@ -13,12 +13,18 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./docker/init/01_schema.sql:/docker-entrypoint-initdb.d/00_bbdd.sql
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
       dockerfile: ./Dockerfile
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
